@@ -1,0 +1,90 @@
+#include "stdafx.h"
+#define number 100
+#include<iostream>
+#include<time.h>
+#include<stdlib.h>
+#include<iomanip>
+#include<math.h>
+
+//排序后按从小到大输出
+
+using namespace std;
+typedef struct  
+{
+	int key;
+	int other;  //记录其他数据域
+	int next;
+}RecType;
+
+RecType S[number+1];
+
+void Merge(RecType R[],RecType R1[],int i,int l,int h)
+{
+	//将有序的R[i..l]和R[l+1..h]归并为有序的R1[i..h]
+	int j;
+	int k;
+	for (j=l+1,k=i;i<=l && j<=h;k++)
+	{
+		//将R[]中记录由小到大地并入R1
+		if (R[i].key<=R[j].key)
+		{
+			R1[k]=R[i++];
+		} 
+		else
+		{
+			R1[k]=R[j++];
+		}
+	} //for
+	if(i<=l) 
+	{
+		R1[k++]=R[i++]; 	  
+	}		
+	if(j<=h)
+	{
+		R1[k++]=R[j++];         //将剩余的R[j..h]复制到R1
+	}
+}//Merge
+
+void Msort(RecType R[],RecType R1[],int s,int t)
+{
+	//将R[s..t]2-路归并排序为R1[s..t]
+	RecType R2[100];
+	if (s==t)
+	{
+		R1[s]=R[s];
+	}
+	else
+	{
+		int m=(s+t)/2;          //将R[s..t]平分为R[s..m]和R[m+1..t]
+		Msort(R,R2,s,m);        //递归的将R[s..m]归并为有序的R2[s..m]
+		Msort(R,R2,m+1,t);      //递归的将R[m+1..t]归并为有序的R2[m+1..t]
+		Merge(R2,R1,s,m,t);     //将R2[s..m]和R2[m+1..t]归并到R1[s..t]
+	}//if
+}//Msort
+
+int _tmain()
+{
+	int n;
+	cout<<"MergingSort.cpp运行结果:\n";
+	int b[100],i;
+	RecType R1[100];
+	srand(time(0));
+	cout<<"输入待排序元素个数n:";cin>>n;
+	RecType SL[100];
+	for(i=1;i<=n;i++)
+	{
+		b[i]=rand()%100;
+		SL[i].key=b[i];
+	}
+	cout<<"排序前数组:\n";
+	for(i=1;i<=n;i++)
+		cout<<setw(4)<<b[i];
+	cout<<endl;
+	Msort(SL,R1,1,n);
+	cout<<"排序后数组:\n";
+	for(i=1;i<=n;i++)
+		cout<<setw(4)<<R1[i].key;
+	cout<<endl;
+	system("pause");   
+}
+

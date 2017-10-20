@@ -1,0 +1,41 @@
+#include "stdafx.h"
+#include "stdafx.h"
+#include <iostream>
+using namespace std;
+
+int bubbleSort (int number  ,int r[])
+{
+	int  temp;
+	for (int i =0;i<=number-1;i++)
+	{
+		for (int j=0;j<=number-i-1;j++)
+		{
+			if (r[j]>r[j+1])
+    			{
+				temp=r[j];
+				r[j]=r[j+1];
+				r[j+1]=temp;
+			}
+		}
+	}
+
+	return 1;
+}
+
+int _tmain(int argc, int argv[])
+{
+	std::cout<<"输入数组大小"<<endl;
+	std::cin>> argc;
+	std::cout<<"输入数组内数据"<<endl;
+	for(int j=0;j<argc;j++)
+	{  
+		std::cin>>argv[j];
+	}
+	bubbleSort (argc ,argv);
+	for(int j=0;j<argc;j++)
+	{  
+		std::cout << argv[j] << std::endl; 
+	}
+	system("pause");
+	return 0;
+}

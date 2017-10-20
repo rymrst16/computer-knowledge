@@ -1,0 +1,59 @@
+#include "stdafx.h"
+#define number 100
+#include<iostream>
+#include<time.h>
+#include<stdlib.h>
+#include<iomanip>
+#include<math.h>
+//排序后按从小到大输出
+using namespace std;
+typedef struct 
+{
+	int key;
+	int other; //记录其他数据域
+	int next;
+}RecType;
+RecType S[number+1];
+void SelectSort(RecType R[],int n)
+{
+	//对记录序列R[1..n]进行直接选择排序
+	for (int i=1;i<n;i++)
+	{
+		int k=i;
+		for (int j=i+1;j<=n;j++)
+		{
+			if (R[k].key>R[j].key)
+			{k=j;}
+		}
+	if (i!=k)
+	{
+		RecType temp;
+		temp=R[i];
+		R[i]=R[k];
+		R[k]=temp;
+	}
+	}
+}
+int _tmain()
+{
+	RecType SL[100];
+	int n;
+	cout<<"SelectSort.cpp运行结果:\n";
+	int b[100],i;
+	srand(time(0));
+	cout<<"输入待排序元素个数n:";
+	cin>>n;
+	for(i=1;i<n;i++)
+	{
+		b[i]=rand()%100;
+		SL[i].key=b[i];
+	}
+	cout<<"排序前数组:\n";
+	for(i=1;i<n;i++)cout<<setw(4)<<b[i];
+	cout<<endl;SelectSort(SL,n);
+	cout<<"排序后数组:\n";
+	for(i=2;i<=n;i++)
+		cout<<setw(4)<<SL[i].key;
+	cout<<endl;
+	system("pause"); 
+}

@@ -1,0 +1,82 @@
+#include "stdafx.h"
+#include <iostream>
+using namespace std;
+
+void sift(int R[],int i,int m) //R[]要排序的数组;i是指是从堆的第几行的首元素 即i=1 2 4 8 16...;m是指数组中一共多少个元素
+{
+	//设R[i+1..m]中各元素满足堆的定义,本算法调整R[i]使序列R[i..m]中的元素满足堆的性质
+	int temp = R [i];
+	for (int j=2*i;j<=m;j*=2)
+	{
+		 //在堆的同一层进行比较，如果右边的大于左边的，则继续向右查找 ，为了保证下面和temp比较的R[j],是这一层上最大的一个
+		if ((j<m)&&(R[j]<R[j+1])) 
+		{
+			j++;
+		}
+		if (temp<R[j]) //temp和每一层最大的数比较，如果小于最大的，则把最大的的值赋给R[i]
+		{
+			R[i]=R[j];
+			i=j;         //修改i的值，此时R[i]=R[j]的值相同       
+		} 
+		else
+		{
+			break;
+		}
+	}
+	R[i]=temp;         //最初要调整的节点放在正确的位置
+}
+
+void  HeapSort( int R[],int n)
+{
+	int i ;
+	int nCreateTime=1;
+	for (i=n/2;i>0;i--)
+	{
+		sift(R,i,n);    //建堆时i从n/2起递减，是指i从从最底层起依次循环向顶层排序 
+		std::cout<<"建堆"<<nCreateTime<<endl;
+		for(int j=1;j<9;j++)  
+		{ 
+			std::cout << R[j];   
+		}
+		nCreateTime++;
+		std::cout<<endl;
+	}
+	int nAdjustTime=1;
+	for (i=n;i>1;i--)
+	{
+		int temp ;
+		temp=R[i];
+		R[i]=R[1];
+		R[1]=temp;
+		sift(R,1,i-1);
+		std::cout<<"重新调整"<<nAdjustTime<<endl;
+		for(int j=1;j<9;j++)  
+		{ 
+			std::cout << R[j];   
+		}
+		nAdjustTime++;
+		std::cout<<endl;
+	}
+
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	int data[9]={0,6,9,3,1,5,8,9};
+	std::cout<<"初始序列"<<endl;
+	for(int j=1;j<9;j++)  
+	{    
+		std::cout << data[j];   
+	}
+	std::cout<<endl;
+	HeapSort( data,8);
+	std::cout<<"生成的有序序列"<<endl;
+	for(int j=1;j<9;j++)  
+	{    
+		std::cout << data[j];   
+	}
+	std::cout<<endl;
+	system("pause");  
+	return 0;
+}
+

@@ -1,0 +1,109 @@
+#include "stdafx.h"
+#define INT_MAX 100
+#define number 100
+#include<iostream>
+#include<time.h>
+#include<stdlib.h>
+#include<iomanip>
+#include<math.h>
+
+//排序后按从小到大输出
+
+using namespace std;
+typedef struct  
+{
+	int key;
+	int other;  //记录其他数据域
+	int next;
+}STListType;
+
+STListType SL[number+1];
+
+
+void ListInsSort(STListType SL[],int n)
+{
+	//对记录序列SL[1..n]进行表插入排序
+	SL[0].key = 10000;
+	SL[0].next=1;
+	SL[1].next=0;               //初始化，假定第一个记录有序
+	int k;
+	for (int i=2; i<n ; i++)    //查找插入位置
+	{
+		int j=0;
+		for (k=SL[0].next;SL[k].key<SL[i].key;)  //保证[k].key>=[i].key
+		{
+			j=k, k=SL[k].next;                   //保证是SL[k]里的总是最大的               
+		}
+		SL[j].next=i;     //结点i插入在结点j和结点k之间  SL[j]<=SL[i]<=SL[k] 
+		SL[i].next =k; 
+
+		cout<<"ListInsSort-key:\n";
+		for(int count=0;count<n;count++)
+			cout<<setw(4)<<SL[count].key;
+		cout<<endl;
+		cout<<"ListInsSort-next:\n";
+		for(int count=0;count<n;count++)
+			cout<<setw(4)<<SL[count].next;
+		cout<<endl;
+	}
+}
+
+void Arrange(STListType SL[],int n)
+{
+	//根据静态表SL中各节点的指针值调整记录位置，使得SL中的记录关键字非递减有序顺序排列
+	//p指示第i个记录的当前位置；i指示第i个记录应在的位置；q指示第i+1个记录的当前位置；
+	int p=SL[0].next;                                  //p指示第一个记录的当前位置
+	int q;
+	for (int i=1;i<n;i++)
+	{
+		//SL[1..i-1]中的记录关键字有序排列，第i个记录在SL中的当前位置应不小于i
+		//为了保证<i 的元素都是有序的
+		while(p<i)                         //找到第i个记录，并用p指示其在SL中的当前位置
+			p=SL[p].next;
+		q=SL[p].next;                      //q指示尚未调整的表尾
+		if (p!=i)
+		{
+			STListType temp;
+			temp = SL[p];
+			SL[p] = SL[i];
+			SL[i] = temp;                    //交换记录，使第i个记录到位 
+			SL[i].next=p;                       //指向被移走的记录，使得以后可以由while循环找到                          
+		}
+		p=q;                                    //p指示尚未调整的表尾，为找第i+1个记录作准比
+
+		cout<<"Arrange-key:\n";
+		for(int count=0;count<n;count++)
+			cout<<setw(4)<<SL[count].key;
+		cout<<endl;
+		cout<<"Arrange-next:\n";
+		for(int count=0;count<n;count++)
+			cout<<setw(4)<<SL[count].next;
+		cout<<endl;
+	}	
+}
+
+int _tmain()
+{
+	STListType SL[100];
+	int n;
+	cout<<"ListInsSort.cpp运行结果:\n";
+	int b[100],i;
+	srand(time(0));
+	cout<<"输入待排序元素个数n:";cin>>n;
+	for(i=1;i<n;i++)
+	{
+		b[i]=rand()%100;
+		SL[i].key=b[i];
+	}
+	cout<<"排序前数组:\n";
+	for(i=1;i<n;i++)
+		cout<<setw(4)<<b[i];
+	cout<<endl;
+	ListInsSort(SL,n);
+	Arrange(SL,n);
+	cout<<"排序后数组:\n";
+	for(i=1;i<n;i++)
+		cout<<setw(4)<<SL[i].key;
+	cout<<endl;
+	system("pause");   
+}

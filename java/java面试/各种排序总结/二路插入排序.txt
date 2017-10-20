@@ -1,0 +1,53 @@
+int BiInsertSort()
+{
+	//二路插入排序算法
+	int iRawBuff[6] ={0,9,6,7,3,2};
+	int final = 0;
+	int first = 0;
+	const int iLenght = 5;
+
+	int iTempBuff[iLenght] = {0};
+
+	iTempBuff[0] = iRawBuff[0];
+	for (int i = 1; i <= iLenght;i++)
+	{
+		if(iRawBuff[i] > iTempBuff[final])
+		{
+			//大于当前最大值，后插
+			final++;
+			iTempBuff[final] = iRawBuff[i];
+
+		}
+		if(iRawBuff[i]< iTempBuff[first])
+		{
+			//小于当前最小值,前插
+			first = (first-1+iLenght)%iLenght;
+			iTempBuff[first] = iRawBuff[i];
+
+		}
+		if(iRawBuff[i] < iTempBuff[final]&&iRawBuff[i] > iTempBuff[first])
+		{
+			//大于当前最小值，小于当前最大值，中间插
+			int j = final++;
+			while (iRawBuff[i] < iTempBuff[j])
+			{
+				iTempBuff[(j+1)%iLenght] = iTempBuff[j];
+				j = (j-1+iLenght)%iLenght;
+			}
+			iTempBuff[j+1] = iRawBuff[i];
+
+		}
+		printf("第%d趟：\n",i-1);
+		for(int k = 0; k < iLenght; k++)
+		{
+			std::cout<<iTempBuff[k]<<"\t";
+		}
+		std::cout<<std::endl;
+	}
+	//导入输入到原始数组中
+	for (int k = 0; k < iLenght; k++)
+	{
+		iRawBuff[k+1] = iTempBuff[(first++)%iLenght];
+	}
+	return 0;
+}

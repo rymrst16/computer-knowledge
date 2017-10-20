@@ -1,0 +1,89 @@
+#include "stdafx.h"
+#include<iostream> 
+#include<string.h> 
+#include<ctype.h> 
+#include<malloc.h> 
+#include<limits.h> 
+#include<stdio.h> 
+#include<stdlib.h> 
+#include<io.h> 
+#include<math.h>
+
+using namespace std;
+
+#define MAX_SIZE 20 
+typedef int KeyType;
+typedef int InfoType; //定义其他数据类型 
+struct RedType{ KeyType key; InfoType otherinfo; };  
+struct SqList
+{ 
+	RedType r[MAX_SIZE];    
+    int length; 
+};
+void print(SqList L)
+{ 
+	int i; 
+	for(i=1;i<=L.length;i++) 
+		cout<<"("<<L.r[i].key<<","<<L.r[i].otherinfo<<")"; 
+	cout<<endl; 
+}
+
+void TreeSort(SqList &L)
+{ 
+	int i,j,j1,k,k1,l;
+	float n=L.length; 
+	RedType *t; 
+	l=(int)ceil(log(n)/log(2.0))+1; //完全二叉树的层数;ceil取上整，返回比x大的最小整数
+	k=(int)pow(2.0,l)-1; //k为l层完全二叉树的结点总数 
+	k1=(int)pow(2.0,l-1)-1; //k1为l-1层二叉完全二叉树的结点总数 
+	t=(RedType*)malloc(k*sizeof(RedType)); //二叉树采用顺序存储 
+	for(i=1;i<=n;i++) //将L.r赋值给叶子结点 
+		t[k1+i-1]=L.r[i]; 
+	for(i=k1+n;i<k;i++) //给多余的叶子结点的关键字赋无穷大值 
+		t[i].key=INT_MAX; 
+	j1=k1; 
+	j=k; 
+	while(j1)
+	{ 
+		//给非叶子结点赋值 
+		for(i=j1;i<j;i+=2)
+		{
+			t[i].key<t[i+1].key?(t[(i+1)/2-1]=t[i]):(t[(i+1)/2-1]=t[i+1]); 
+		}		
+		j=j1; j1=(j1-1)/2; 
+		cout<<"给非叶子结点赋值:"<<endl;     //循环一次，找到最小的
+		print(L); 
+	} 
+	for(i=0;i<n;i++)
+	{ 
+		L.r[i+1]=t[0]; //键当前最小值赋给L.r[i] 
+		j1=0; 
+		for(j=1;j<l;j++) //沿树根找到结点t[0]在叶子结中的序号j1 
+			t[2*j1+1].key==t[j1].key?(j1=2*j1+1):(j1=2*j1+2); 
+		t[j1].key=INT_MAX; 
+		while(j1)
+		{ 
+			j1=(j1+1)/2-1; //序号为j1的节点的双亲节点序号 
+			t[2*j1+1].key<=t[2*j1+2].key?(t[j1]=t[2*j1+1]):(t[j1]=t[2*j1+2]); 
+		} 
+		cout<<"循环排序:"<<endl; 
+		print(L); 
+	} 
+	free(t); 
+}
+#define N 8
+void main()
+{ 
+	RedType d[N]={{49,1},{38,2},{65,3},{97,4},{76,5},{13,6},{27,7},{49,8}}; 
+	SqList l; 
+	int i; 
+	for(i=0;i<N;i++) 
+		l.r[i+1]=d[i]; 
+	l.length=N; 
+	cout<<"排序前："<<endl; 
+	print(l); 
+	TreeSort(l); 
+	cout<<"排序后："<<endl; 
+	print(l); 
+	system("pause"); 
+}

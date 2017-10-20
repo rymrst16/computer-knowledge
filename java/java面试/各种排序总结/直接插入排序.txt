@@ -1,0 +1,37 @@
+#include "stdafx.h"
+#include "stdafx.h"
+#include <iostream>
+using namespace std;
+
+void StrInsSort (int number  ,int r[])
+{
+	int temp;
+	for(int i=1;i<=number;i++)
+	{
+		temp=r[i];int j=i-1;
+		while(temp<r[j])
+		{
+			r[j+1]=r[j];
+			j--;
+		}
+		r[j+1]=temp;
+	}
+}
+
+int _tmain(int argc, int argv[])
+{
+	std::cout<<"输入数组大小"<<endl;
+	std::cin>> argc;
+	std::cout<<"输入数组内数据"<<endl;
+	for(int j=0;j<argc;j++)
+	{  
+		std::cin>>argv[j];
+	}
+	StrInsSort (argc ,argv);
+	for(int j=0;j<argc;j++)
+	{  
+		std::cout << argv[j] << std::endl; 
+	}
+	system("pause");
+	return 0;
+}

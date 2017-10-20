@@ -1,0 +1,49 @@
+/* 桶排序实现 */ 
+#include "stdafx.h"
+#include <iostream>
+#include <cstdio> 
+#include <cstdlib> 
+#include <cmath> 
+#include <cstring>
+#include <stdlib.h>
+#include<time.h>
+#include<iomanip>
+#include<math.h>
+
+using namespace std; 
+
+void BucketSort(int *A,int *B,int N,int K) 
+{ 
+	int *C=new int[K+1]; 
+	int i,j,k; 
+	memset(C,0,sizeof(int)*(K+1)); 
+	for (i=1;i<=N;i++) //把A中的每个元素按照值放入桶中 
+		C[A[i]]++; 
+	for (i=j=1;i<=K;i++,j=k) //统计每个桶元素的个数，并输出到B 
+		for (k=j;k<j+C[i];k++) 
+			B[k]=i; 
+}
+
+int main() 
+{ 
+	int *A,*B,N=100,K=100,i; 
+	A=new int[N+1]; 
+	B=new int[N+1]; 
+	cout<<"排序前："<<endl;
+	for (i=1;i<=N;i++) 
+	{
+		A[i]=rand()%K+1; //生成1..K的随机数 
+		cout<<setw(4)<<A[i];
+	}	
+	cout<<endl; 
+	BucketSort(A,B,N,K);
+	cout<<"排序后："<<endl;
+	for (i=1;i<=N;i++) 
+	{
+		cout<<setw(4)<<B[i];
+	}
+	cout<<endl;
+	system("pause");  
+	return 0; 
+} 
+
